@@ -1,0 +1,47 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: "{{ .Release.Name }}-backend"
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    cert-manager.io/cluster-issuer: cloudflare
+spec:
+  tls:
+    - hosts:
+        - "api.{{ .Values.ingress.baseDomain }}"
+      secretName: "api.{{ .Values.ingress.baseDomain }}"
+  rules:
+    - host: "api.{{ .Values.ingress.baseDomain }}"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: "{{ .Release.Name }}-backend"
+                port:
+                  number: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: "{{ .Release.Name }}-frontend"
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    cert-manager.io/cluster-issuer: cloudflare
+spec:
+  tls:
+    - hosts:
+        - {{ .Values.ingress.baseDomain }}
+      secretName: {{ .Values.ingress.baseDomain }}
+  rules:
+    - host: {{ .Values.ingress.baseDomain }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: "{{ .Release.Name }}-frontend"
+                port:
+                  number: 3000

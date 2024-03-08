@@ -1,0 +1,4 @@
+image:
+  tag: main
+ingress:
+  baseDomain: example.com

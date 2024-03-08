@@ -1,0 +1,8 @@
+.git/
+.github/
+.helm/
+backend/bin/
+backend/obj/
+frontend/dist/
+frontend/node_modules/
+*.md

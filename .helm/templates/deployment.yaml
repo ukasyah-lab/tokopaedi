@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Release.Name }}-backend"
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: "{{ .Release.Name }}-backend"
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app: "{{ .Release.Name }}-backend"
+  template:
+    metadata:
+      labels:
+        app: "{{ .Release.Name }}-backend"
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }}
+    spec:
+      containers:
+        - name: "{{ .Release.Name }}-backend"
+          image: ghcr.io/ukasyah-lab/{{ .Release.Name }}-backend:{{ .Values.image.tag }}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+      imagePullSecrets:
+        - name: ghcr-login
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Release.Name }}-frontend"
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: "{{ .Release.Name }}-frontend"
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app: "{{ .Release.Name }}-frontend"
+  template:
+    metadata:
+      labels:
+        app: "{{ .Release.Name }}-frontend"
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }}
+    spec:
+      containers:
+        - name: "{{ .Release.Name }}-frontend"
+          image: ghcr.io/ukasyah-lab/{{ .Release.Name }}-frontend:{{ .Values.image.tag }}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+      imagePullSecrets:
+        - name: ghcr-login

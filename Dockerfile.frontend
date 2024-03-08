@@ -1,0 +1,18 @@
+FROM node:20-slim AS build
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+WORKDIR /build
+COPY frontend .
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+  pnpm install --frozen-lockfile
+RUN pnpm build
+RUN pnpm prune --prod
+
+FROM node:20-slim
+WORKDIR /app
+COPY --from=build /build/.next/standalone .
+COPY --from=build /build/.next/static .next/static
+COPY --from=build /build/public public
+EXPOSE 3000
+CMD ["server.js"]
