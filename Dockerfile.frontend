@@ -4,7 +4,7 @@ ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 WORKDIR /build
 COPY frontend .
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+RUN --mount=type=cache,target=/pnpm/store \
   pnpm install --frozen-lockfile
 RUN pnpm build
 RUN pnpm prune --prod

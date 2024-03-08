@@ -2,9 +2,9 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS backend-build
 ARG TARGETARCH
 WORKDIR /backend
 COPY backend .
-RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
+RUN --mount=type=cache,target=/root/.nuget/packages \
     dotnet restore -a $TARGETARCH
-RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
+RUN --mount=type=cache,target=/root/.nuget/packages \
   dotnet publish backend.csproj -a $TARGETARCH -o /app --no-restore
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
