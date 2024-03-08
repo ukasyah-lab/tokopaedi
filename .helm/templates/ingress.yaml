@@ -8,10 +8,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - "api.{{ .Values.ingress.baseDomain }}"
-      secretName: "api.{{ .Values.ingress.baseDomain }}"
+        - "api-{{ .Values.ingress.baseDomain }}"
+      secretName: "api-{{ .Values.ingress.baseDomain }}"
   rules:
-    - host: "api.{{ .Values.ingress.baseDomain }}"
+    - host: "api-{{ .Values.ingress.baseDomain }}"
       http:
         paths:
           - path: /
