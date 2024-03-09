@@ -1,6 +1,6 @@
 namespace backend.Models;
 
-public class Transaction
+public class TransactionDetail
 {
   public long Id { get; set; }
   public long TransactionId { get; set; }
